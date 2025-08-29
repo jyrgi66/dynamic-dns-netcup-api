@@ -1,8 +1,8 @@
 <?php
 
-const VERSION = '5.0';
+const VERSION = '5.1';
 const SUCCESS = 'success';
-const USERAGENT = "dynamic-dns-netcup-api/" . VERSION ." (by stecklars)";
+const USERAGENT = "dynamic-dns-netcup-api/" . VERSION ." (by stecklars / modified by jyrgi66)";
 
 //Check passed options
 $shortopts = "q4:6:c:vh";
@@ -553,4 +553,30 @@ function updateDnsRecords($domainname, $customernr, $apikey, $apisessionid, $dns
 
     outputStderr(sprintf("Error while updating DNS Records: %s Exiting.", $result['longmessage']));
     return false;
+}
+
+// Load stored IP addresses from file
+function loadStoredIPs() {
+    $ipFile = __DIR__ . '/stored_ips.json';
+    if (file_exists($ipFile)) {
+        $content = file_get_contents($ipFile);
+        return json_decode($content, true);
+    }
+    return array();
+}
+
+// Store IP addresses to file
+function storeIPs($ipv4, $ipv6) {
+    $ipFile = __DIR__ . '/stored_ips.json';
+    $ips = array();
+    
+    if (USE_IPV4 === true) {
+        $ips['ipv4'] = $ipv4;
+    }
+    
+    if (USE_IPV6 === true) {
+        $ips['ipv6'] = $ipv6;
+    }
+    
+    file_put_contents($ipFile, json_encode($ips));
 }

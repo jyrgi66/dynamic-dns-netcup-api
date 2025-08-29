@@ -40,11 +40,25 @@ if (!defined('IPV6_ADDRESS_URL_FALLBACK')) {
     define('IPV6_ADDRESS_URL_FALLBACK', 'https://v6.ident.me/');
 }
 
+// Load stored IPs
+$storedIPs = loadStoredIPs();
+
+// Check if we need to update
+$needUpdate = false;
+
 if (USE_IPV4 === true) {
     // Get current IPv4 address
     if (!$publicIPv4 = getCurrentPublicIPv4()) {
         outputStderr("Main API and fallback API didn't return a valid IPv4 address (Try 3 / 3). Exiting.");
         exit(1);
+    }
+    
+    // Check if IPv4 has changed
+    if (!isset($storedIPs['ipv4']) || $storedIPs['ipv4'] !== $publicIPv4) {
+        $needUpdate = true;
+        outputStdout("IPv4 address has changed. Before: " . (isset($storedIPs['ipv4']) ? $storedIPs['ipv4'] : 'None') . "; Now: $publicIPv4");
+    } else {
+        outputStdout("IPv4 address hasn't changed. Current IPv4 address: ".$publicIPv4);
     }
 }
 
@@ -54,6 +68,20 @@ if (USE_IPV6 === true) {
         outputStderr("Main API and fallback API didn't return a valid IPv6 address (Try 3 / 3). Do you have IPv6 connectivity? If not, please disable USE_IPV6 in config.php. Exiting.");
         exit(1);
     }
+    
+    // Check if IPv6 has changed
+    if (!isset($storedIPs['ipv6']) || $storedIPs['ipv6'] !== $publicIPv6) {
+        $needUpdate = true;
+        outputStdout("IPv6 address has changed. Before: " . (isset($storedIPs['ipv6']) ? $storedIPs['ipv6'] : 'None') . "; Now: $publicIPv6");
+    } else {
+        outputStdout("IPv6 address hasn't changed. Current IPv6 address: ".$publicIPv6);
+    }
+}
+
+// If no IP changes detected, exit early
+if (!$needUpdate) {
+    outputStdout("No IP address changes detected. Exiting without API calls.");
+    exit(0);
 }
 
 // Login
@@ -142,7 +170,6 @@ foreach ($domains as $domain => $subdomains) {
                 if ($record['destination'] !== $publicIPv4) {
                     //Yes, it has changed.
                     $ipv4change = true;
-
                     outputStdout(sprintf("IPv4 address has changed. Before: %s; Now: %s", $record['destination'], $publicIPv4));
                 } else {
                     //No, it hasn't changed.
@@ -223,6 +250,9 @@ foreach ($domains as $domain => $subdomains) {
         }
     }
 }
+
+// Store the new IP addresses
+storeIPs($publicIPv4, $publicIPv6);
 
 //Logout
 if (logout(CUSTOMERNR, APIKEY, $apisessionid)) {

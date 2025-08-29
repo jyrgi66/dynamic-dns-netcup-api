@@ -1,3 +1,4 @@
 config.php
+stored_ips.json
 update.log
 .php-cs-fixer.cache
