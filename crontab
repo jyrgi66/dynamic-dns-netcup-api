@@ -1,0 +1,2 @@
+# m  h  dom mon dow   command
+*/20 *  *   *   *     $HOME/bin/ddns-netcup/update.php > $HOME/bin/ddns-netcup/update.log 2>&1
