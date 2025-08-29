@@ -1,4 +1,12 @@
 # Dynamic DNS client for netcup DNS API
+
+> **Remark from jyrgi66**
+>
+> This project has been forked from [stecklars/dynamic-dns-netcup-api](https://github.com/stecklars/dynamic-dns-netcup-api).
+> Kudos to the original author for this excellent tool.
+> I extended the functionality in a way to avoid API calls, when the IP addresses
+> have not been changed since the last call. This was anyways on the roadmap of stecklars.
+
 *This project is not affiliated with the company netcup GmbH. Although it is developed by an employee, it is not an official client by netcup GmbH and was developed in my free time.*
 *netcup is a registered trademark of netcup GmbH, Karlsruhe, Germany.*
 
@@ -24,7 +32,7 @@
 * Hiding output (quiet option)
 
 ### Missing
-* Caching the IP provided to netcup DNS, to avoid running into (currently extremely tolerant) rate limits in the DNS API
+* ~~Caching the IP provided to netcup DNS, to avoid running into (currently extremely tolerant) rate limits in the DNS API~~
 * Probably a lot more :grin: – to be continued...
 
 ## Getting started
