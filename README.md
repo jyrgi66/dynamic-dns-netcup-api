@@ -37,9 +37,9 @@
 
 ## Getting started
 ### Download
-Download the [latest version](https://github.com/stecklars/dynamic-dns-netcup-api/releases/latest) from the releases or clone the repository:
+Download the [latest version](https://github.com/jyrgi66/dynamic-dns-netcup-api/releases/) from the releases or clone the repository:
 
-`$ git clone https://github.com/stecklars/dynamic-dns-netcup-api.git`
+`$ git clone https://github.com/jyrgi66/dynamic-dns-netcup-api.git`
 
 I'm always trying to keep the master branch stable.
 
